@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<body>
+<h1>RedAI Online</h1>
+<input id='u'>
+<input id='p'>
+<button onclick='signup()'>Signup</button>
+<button onclick='login()'>Login</button>
+
+<input id='msg'>
+<button onclick='send()'>Send</button>
+
+<script>
+let token=null;
+let chatId="main";
+
+async function signup(){
+await fetch("/signup",{
+method:"POST",
+headers:{"Content-Type":"application/json"},
+body:JSON.stringify({user:u.value,pass:p.value})
+});
+}
+
+async function login(){
+let r=await fetch("/login",{
+method:"POST",
+headers:{"Content-Type":"application/json"},
+body:JSON.stringify({user:u.value,pass:p.value})
+});
+let d=await r.json();
+token=d.token;
+}
+
+async function send(){
+let r=await fetch("/chat",{
+method:"POST",
+headers:{"Content-Type":"application/json","token":token},
+body:JSON.stringify({msg:msg.value,chatId})
+});
+let d=await r.json();
+alert(d.reply);
+}
+</script>
+</body>
+</html>
